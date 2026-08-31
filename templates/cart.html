@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+<div class="cart-page-container">
+    <h1 class="page-title">Carrito de Compras</h1>
+
+    {% if items %}
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td class="product-name">{{ item.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ "{:,.2f}".format(item.price) }}</td>
+                <td class="subtotal-price">${{ "{:,.2f}".format(item.item_total) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="cart-summary">
+        <h2>Total: <span class="total-price">${{ "{:,.2f}".format(total) }}</span></h2>
+        <button class="checkout-btn" onclick="alert('¡Gracias por tu compra!')">Finalizar Pedido</button>
+    </div>
+    {% else %}
+    <div class="empty-cart-message">
+        <p>Tu carrito está vacío.</p>
+        <a href="/" class="btn-back">Volver a la tienda</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

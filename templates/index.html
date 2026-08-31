@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- Fuentes de Google Fonts (Cinzel para lujo y Montserrat para textos) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snaf - Perfumería de Lujo</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link 
+  rel="icon" 
+  type="image/svg+xml" 
+  href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='32' r='30' fill='%23121212' stroke='%23d4af37' stroke-width='2'/><path d='M24 18 h16 v6 h-16 z' fill='%23d4af37'/><rect x='28' y='24' width='8' height='6' fill='%23121212' stroke='%23d4af37' stroke-width='1.5'/><rect x='20' y='30' width='24' height='26' rx='4' fill='%231a1a1a' stroke='%23d4af37' stroke-width='2'/><circle cx='32' cy='43' r='7' fill='%23d4af37'/><circle cx='32' cy='43' r='5' fill='%23121212'/></svg>" 
+/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+<body>
+
+  <!-- Navegación -->
+ <nav class="navbar">
+  <!-- Espaciador a la izquierda para balancear el carrito -->
+  <div class="nav-spacer"></div>
+
+  <!-- Bloque central de marca -->
+  <a href="/" class="brand-header">
+    <span class="brand-line"></span>
+    <div class="brand-text-block">
+      <h1 class="brand-name">S N A F</h1>
+      <span class="brand-subtitle">P E R F U M E S</span>
+    </div>
+    <span class="brand-line"></span>
+  </a>
+
+  <!-- Carrito a la derecha -->
+  <button class="cart-icon-btn" onclick="toggleCart()">
+    <i class="fa-solid fa-bag-shopping"></i>
+    <span class="cart-badge" id="cartBadge">0</span>
+  </button>
+</nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <h1>Descubre Tu Propia Escencia</h1>
+    <p style="color: var(--color1)">Explora la colección exclusiva de las mejores casas de perfumería mundial</p>
+  </header>
+
+  <!-- Controles -->
+  <section class="controls-container">
+    <div class="filter-group">
+      <button class="filter-btn active" onclick="setCategory('all', this)">Todos</button>
+      <button class="filter-btn" onclick="setCategory('hombre', this)">Hombre</button>
+      <button class="filter-btn" onclick="setCategory('mujer', this)">Mujer</button>
+      <button class="filter-btn" onclick="setCategory('Unisex', this)">Unisex</button>
+    </div>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Buscar por marca o perfume..." oninput="handleSearch()">
+    </div>
+  </section>
+
+  <!-- Grid de Productos -->
+  <main class="product-grid" id="productGrid">
+    <!-- Renderizado dinámico vía JavaScript -->
+  </main>
+
+  <!-- Slider del Carrito -->
+  <aside class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h2>Tu Carrito</h2>
+      <button class="close-btn" onclick="toggleCart()">&times;</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <!-- Elementos del carrito agregados mediante JS -->
+    </div>
+    <div class="cart-footer">
+      <div style="display:flex; justify-content:space-between; font-size: 1.2rem;">
+        <span>Total:</span>
+        <span id="cartTotal" style="color: var(--accent-gold); font-weight: bold;">$0.00</span>
+      </div>
+      <button class="checkout-btn" onclick="checkout()">Finalizar Pedido</button>
+    </div>
+  </aside>
+
+  <!-- Lógica Dinámica en JS -->
+  <script>
+    let currentCategory = 'all';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadProducts();
+      updateCartUI();
+    });
+
+    async function loadProducts() {
+      const search = document.getElementById('searchInput').value;
+      const response = await fetch(`/api/products?category=${currentCategory}&search=${search}`);
+      const products = await response.json();
+      
+      const grid = document.getElementById('productGrid');
+      grid.innerHTML = '';
+
+      if (products.length === 0) {
+        grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted)">No se encontraron fragancias.</p>`;
+        return;
+      }
+
+      products.forEach(p => {
+        grid.innerHTML += `
+          <div class="product-card">
+            <img src="/static/img/${p.image}" alt="${p.name}">
+            <div>
+              <span class="product-brand">${p.brand}</span>
+              <h3 class="product-title">${p.name}</h3>
+              <p class="product-notes"><i class="fa-solid fa-droplet"></i> ${p.notes}</p>
+            </div>
+            <div class="product-footer">
+             <span class="product-price">$${Number(p.price).toLocaleString('es-CO')}</span>
+              <button class="btn-add" onclick="addToCart(${p.id})">Añadir</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function setCategory(cat, btn) {
+      currentCategory = cat;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      loadProducts();
+    }
+
+    function handleSearch() {
+      loadProducts();
+    }
+
+    function toggleCart() {
+      document.getElementById('cartDrawer').classList.toggle('open');
+    }
+
+    async function addToCart(id) {
+      await fetch('/api/cart', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+      updateCartUI();
+      document.getElementById('cartDrawer').classList.add('open');
+    }
+
+    async function removeFromCart(id) {
+      await fetch('/api/cart', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+      updateCartUI();
+    }
+
+    async function updateCartUI() {
+      const res = await fetch('/api/cart');
+      const data = await res.json();
+      
+      document.getElementById('cartBadge').innerText = data.total_count;
+      
+      // Formateamos el total con puntos de miles colombianos
+      document.getElementById('cartTotal').innerText = `$${Number(data.total).toLocaleString('es-CO')}`;
+      
+      const container = document.getElementById('cartItems');
+      container.innerHTML = '';
+
+      if(data.items.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-muted); text-align:center;">El carrito está vacío.</p>';
+        return;
+      }
+
+      data.items.forEach(item => {
+        container.innerHTML += `
+          <div class="cart-item">
+            <div>
+              <strong>${item.name}</strong>
+              <div style="font-size: 0.85rem; color: var(--text-muted);">
+                Cant: ${item.quantity} x $${Number(item.price).toLocaleString('es-CO')}
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap: 10px;">
+              <span style="font-weight:bold; color:var(--accent-gold);">$${Number(item.item_total).toLocaleString('es-CO')}</span>
+              <button style="background:none; border:none; color: #ef4444; cursor:pointer;" onclick="removeFromCart(${item.id})">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    // NUEVA FUNCIÓN: Redirecciona a la página de Checkout
+    async function checkout() {
+      const res = await fetch('/api/cart');
+      const data = await res.json();
+
+      if (!data.items || data.items.length === 0) {
+        alert("Tu carrito está vacío.");
+        return;
+      }
+
+      // Creamos un formulario invisible para enviar los datos del carrito a /checkout
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = '/checkout';
+
+      const cartInput = document.createElement('input');
+      cartInput.type = 'hidden';
+      cartInput.name = 'cart_data';
+      cartInput.value = JSON.stringify(data.items);
+
+      form.appendChild(cartInput);
+      document.body.appendChild(form);
+      form.submit();
+    }
+  </script>
+</body>
+</html>

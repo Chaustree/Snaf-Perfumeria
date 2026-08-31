@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen de Compra - SNAF</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        .checkout-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            color: #fff;
+        }
+        .checkout-title {
+            font-family: 'Bodoni Moda', serif;
+            color: #e6c885;
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        @media (max-width: 768px) {
+            .checkout-grid { grid-template-columns: 1fr; }
+        }
+        .order-summary, .payment-section {
+            background-color: var(--bg-card, #221910);
+            border: 1px solid #3d2d1d;
+            border-radius: 12px;
+            padding: 24px;
+        }
+        .order-summary h2, .payment-section h2 {
+            font-size: 1.2rem;
+            color: #e6c885;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #3d2d1d;
+            padding-bottom: 8px;
+        }
+        .checkout-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px dashed #3d2d1d;
+        }
+        .checkout-item-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .checkout-item-name { font-weight: 600; }
+        .checkout-item-meta { font-size: 0.85rem; opacity: 0.7; }
+        .checkout-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #e6c885;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #3d2d1d;
+        }
+        .payment-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border: 1px solid #3d2d1d;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .payment-option:hover {
+            background: rgba(230, 200, 133, 0.1);
+        }
+        .payment-option input { accent-color: #e6c885; }
+        
+        /* Estilos añadidos para los campos del formulario */
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            color: #e6c885;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 6px;
+            border: 1px solid #3d2d1d;
+            background-color: #16120d;
+            color: #fff;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+        }
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #e6c885;
+        }
+
+        .btn-pay {
+            width: 100%;
+            padding: 14px;
+            background-color: #e6c885;
+            color: #111;
+            font-weight: 700;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 1rem;
+        }
+        .btn-pay:hover { background-color: #d4af37; }
+        .back-link {
+            display: inline-block;
+            color: #a88a50;
+            margin-bottom: 20px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body style="background-color: #16120d; font-family: 'Montserrat', sans-serif;">
+
+    <div class="checkout-container">
+        <a href="/" class="back-link">← Volver a la tienda</a>
+        <h1 class="checkout-title">RESUMEN DE TU PEDIDO</h1>
+
+        {% set items_cart = cart if cart else items %}
+        {% if items_cart %}
+        <div class="checkout-grid">
+            <!-- Lista de Productos -->
+            <div class="order-summary">
+                <h2>Productos Seleccionados</h2>
+                {% for item in items_cart %}
+                <div class="checkout-item">
+                    <div class="checkout-item-info">
+                        <span class="checkout-item-name">{{ item.brand if item.brand else item.name }}</span>
+                        <span class="checkout-item-meta">Cant: {{ item.quantity }} x ${{ "{:,.0f}".format(item.price if item.price else (item.item_total / item.quantity)).replace(',', '.') }}</span>
+                    </div>
+                    <span>${{ "{:,.0f}".format(item.price * item.quantity if item.price else item.item_total).replace(',', '.') }}</span>
+                </div>
+                {% endfor %}
+
+                <div class="checkout-total">
+                    <span>Total a pagar:</span>
+                    <span>${{ "{:,.0f}".format(total).replace(',', '.') }}</span>
+                </div>
+            </div>
+
+            <!-- Datos de Envío y Método de Pago -->
+            <div class="payment-section">
+                <form action="/confirmar-pedido" method="POST">
+                    
+                    <h2>1. Datos de Envío</h2>
+                    <div class="form-group">
+                        <label for="nombre">Nombre Completo</label>
+                        <input type="text" id="nombre" name="nombre" required placeholder="Ej: Pepito Pérez">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefono">Teléfono / WhatsApp</label>
+                        <input type="tel" id="telefono" name="telefono" required placeholder="Ej: 3001234567">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="direccion">Dirección Completa de Entrega</label>
+                        <textarea id="direccion" name="direccion" rows="3" required placeholder="Ej: Calle 10 # 5-20, Barrio"></textarea>
+                    </div>
+
+                    <h2>2. Método de Pago</h2>
+                    <label class="payment-option">
+                        <input type="radio" name="payment_method" value="nequi" checked>
+                        <span>Nequi / Daviplata</span>
+                    </label>
+
+                    <label class="payment-option">
+                        <input type="radio" name="payment_method" value="contraentrega">
+                        <span>Pago Contra Entrega</span>
+                    </label>
+
+                    <button type="submit" class="btn-pay">CONFIRMAR MI PEDIDO</button>
+                </form>
+            </div>
+        </div>
+        {% else %}
+        <p style="text-align: center; color: #aaa;">No tienes productos en el carrito. <a href="/" style="color: #e6c885;">Ir a comprar</a></p>
+        {% endif %}
+    </div>
+
+</body>
+</html>

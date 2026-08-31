@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="py-5 text-center text-light">
+    <div class="container py-5" style="max-width: 600px;">
+        <div class="card bg-dark text-white border-warning shadow-lg p-4">
+            <div class="card-body">
+                <h1 class="text-warning mb-3">¡Gracias por tu compra en SNAF, {{ nombre }}!</h1>
+                <p class="fs-5">Hemos recibido tu pedido correctamente por un total de <strong>${{ "{:,.0f}".format(total) }} COP</strong>.</p>
+                
+                {% if metodo_pago == 'nequi_daviplata' %}
+                <div class="alert alert-dark border-warning text-start my-4">
+                    <h5 class="text-warning">Instrucciones de pago (Nequi / Daviplata):</h5>
+                    <p class="mb-1">1. Realiza la transferencia al número: <strong>300 123 4567</strong>.</p>
+                    <p class="mb-0">2. Envía el comprobante de pago vía WhatsApp indicando tu nombre y número de pedido.</p>
+                </div>
+                {% elif metodo_pago == 'contraentrega' %}
+                <p class="text-muted my-3">Recuerda tener el dinero en efectivo listo al momento de recibir tu paquete de SNAF.</p>
+                {% endif %}
+
+                <a href="{{ url_for('index') }}" class="btn btn-outline-warning btn-lg mt-3">Volver a la Tienda SNAF</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

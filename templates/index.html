@@ -21,6 +21,17 @@
 
   <!-- Navegación -->
  <nav class="navbar">
+
+
+<div class="dropdown">
+        <button class="dropdown-btn">☰ Menú ▾</button>
+        <div class="dropdown-content">
+            <a href="#" onclick="openModal('aboutModal'); return false;">Sobre Nosotros</a>
+            <a href="#" onclick="openModal('contactModal'); return false;">Contáctanos</a>
+        </div>
+    </div>
+
+
   <!-- Espaciador a la izquierda para balancear el carrito -->
   <div class="nav-spacer"></div>
 
@@ -218,6 +229,69 @@
       document.body.appendChild(form);
       form.submit();
     }
+
+
+
+function openModal(modalId) {
+        document.getElementById(modalId).style.display = 'block';
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+
+    // Cerrar el modal al hacer clic fuera del contenido
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = 'none';
+        }
+    }
+
+
+
   </script>
+
+
+
+
+<!-- Modal Sobre Nosotros -->
+<div id="aboutModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal('aboutModal')">&times;</span>
+        <h2>Sobre Nosotros</h2>
+        <div class="modal-body">
+            <h3>Nuestra Misión</h3>
+            <p>Ofrecer perfumes de lujo y fragancias exclusivas de las mejores casas internacionales, brindando elegancia, autenticidad y una experiencia olfativa inolvidable.</p>
+            
+            <h3>Nuestra Visión</h3>
+            <p>Convertirnos en la tienda de perfumería de referencia, destacando por nuestro catálogo selecto, atención personalizada y rapidez en entregas.</p>
+            
+            <h3>Valores</h3>
+            <p>Calidad garantizada, elegancia en cada detalle y compromiso total con nuestros clientes.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Contáctanos -->
+<div id="contactModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal('contactModal')">&times;</span>
+        <h2>Contáctanos</h2>
+        <div class="modal-body">
+            <p class="support-notice">⚠️ <strong>¿Tu pedido tuvo algún problema o llegó defectuoso?</strong> Escríbenos por cualquiera de nuestros medios adjuntando tu número de orden y una foto/video del estado del paquete para darte solución inmediata.</p>
+            
+            <ul class="contact-links">
+                <li>📱 <strong>WhatsApp:</strong> <a href="https://wa.me/573227155716" target="_blank">+57 322 7155716</a></li>
+                <li>📧 <strong>Correo:</strong> <a href="mailto:snafperfumeria15@gmail.com">snafperfumeria15@gmail.com</a></li>
+                <li>📸 <strong>Instagram:</strong> <a href="https://instagram.com/snaf_perfumeria" target="_blank">@snaf_perfumeria</a></li>
+                <li>🎵 <strong>TikTok:</strong> <a href="https://tiktok.com/@maisondesnaf" target="_blank">@maisondesnaf</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+
+
 </body>
 </html>

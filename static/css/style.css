@@ -473,3 +473,70 @@ h1, .logo, .brand-name {
 .checkout-btn:hover {
   background: var(--accent-gold-hover);
 }
+
+
+
+/* ==========================================
+   AJUSTES RESPONSIVOS PARA CELULARES
+   ========================================== */
+@media (max-width: 768px) {
+  
+  /* 1. Ajustes a la Navbar */
+  .navbar {
+    padding: 0.8rem 4%; /* Reducir espacio lateral */
+  }
+
+  .brand-name {
+    font-size: 1.5rem; /* Reducir tamaño del logo para que no choque */
+    letter-spacing: 0.1em;
+  }
+
+  .brand-subtitle {
+    font-size: 0.5rem;
+    letter-spacing: 0.3em;
+  }
+
+  .brand-line {
+    width: 20px; /* Acortar las líneas decorativas laterales */
+  }
+
+  .dropdown-btn {
+    padding: 6px 10px;
+    font-size: 12px; /* Hacer el botón de menú un poco más compacto */
+  }
+
+  /* 2. Ajuste al Hero (Sección principal) */
+  .hero h1 {
+    font-size: 1.8rem; /* Reducir el tamaño del título principal */
+  }
+
+  /* 3. Controles y Filtros */
+  .controls-container {
+    padding: 0 4% 1.5rem;
+    flex-direction: column; /* Apilar la barra de búsqueda y filtros verticalmente */
+    align-items: stretch;
+  }
+
+  .search-bar input {
+    width: 100%; /* La barra de búsqueda ocupa todo el ancho disponible */
+  }
+
+  /* 4. Grilla de Productos (1 columna en móviles) */
+  .product-grid {
+    grid-template-columns: 1fr; /* Muestra un producto por fila */
+    padding: 0 4% 2rem;
+    gap: 1.2rem;
+  }
+
+  /* 5. Ajuste de Carrito Lateral y Modales */
+  .cart-drawer {
+    width: 100%; /* El carrito ocupa toda la pantalla en móvil */
+    right: -100%;
+  }
+
+  .modal-content {
+    width: 95%;
+    padding: 20px 15px;
+    margin: 15% auto;
+  }
+}

@@ -11,6 +11,151 @@
   --color2: #C39953;
 }
 
+
+
+/* --- Menú Desplegable --- */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    flex: 1; /* Asegura espacio balanceado a la izquierda */
+}
+
+.dropdown-btn {
+    background-color: transparent;
+    color: #d4af37;
+    border: 1px solid #d4af37;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.dropdown-btn:hover {
+    background-color: #d4af37;
+    color: #000;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #1a1a1a;
+    min-width: 170px;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.5);
+    border: 1px solid #333;
+    border-radius: 8px;
+    z-index: 100;
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.dropdown-content a {
+    color: #e0e0e0;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.dropdown-content a:hover {
+    background-color: #d4af37;
+    color: #000;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* --- Ventanas Modales --- */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.8);
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background-color: #1c1c1c;
+    color: #f0f0f0;
+    margin: 8% auto;
+    padding: 25px 30px;
+    border: 1px solid #d4af37;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+}
+
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    color: #d4af37;
+}
+
+.modal h2 {
+    color: #d4af37;
+    margin-top: 0;
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+}
+
+.modal-body h3 {
+    color: #d4af37;
+    margin-top: 15px;
+    font-size: 16px;
+}
+
+.modal-body p {
+    color: #ccc;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.support-notice {
+    background-color: #2a2200;
+    border-left: 3px solid #d4af37;
+    padding: 10px 12px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.contact-links {
+    list-style: none;
+    padding: 0;
+}
+
+.contact-links li {
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+.contact-links a {
+    color: #d4af37;
+    text-decoration: none;
+}
+
+.contact-links a:hover {
+    text-decoration: underline;
+}
+
+
+
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -31,7 +176,6 @@ h1, .logo, .brand-name {
     text-transform: uppercase;
 }
 /* Navbar */
-/* Navbar */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -39,13 +183,15 @@ h1, .logo, .brand-name {
   padding: 1.2rem 8%;
   background-color: #241a10; /* Un café/ébano súper elegante y oscuro */
   border-bottom: 1px solid #3d2d1d;
-  position: sticky;
+  position: relative;
   top: 0;
   z-index: 100;
 }
 
 .nav-spacer {
-  width: 40px; /* Equilibra el ancho del botón del carrito */
+  display: flex;
+  justify-content: flex-end;
+  flex: 1; /* Equilibra el espacio de la derecha con respecto al menú de la izquierda */
 }
 
 /* Marca central */
@@ -54,6 +200,9 @@ h1, .logo, .brand-name {
   align-items: center;
   gap: 20px;
   text-decoration: none;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%); /* Forzar centrado absoluto exacto */
 }
 
 .brand-text-block {

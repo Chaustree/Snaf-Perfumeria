@@ -269,7 +269,7 @@ h1, .logo, .brand-name {
 /* Hero Section */
 .hero {
   text-align: center;
-  padding: 4rem 1rem 2rem;
+  padding: 1.5rem 1rem 1.5rem;
 }
 
 .hero h1 {
@@ -476,6 +476,16 @@ h1, .logo, .brand-name {
 
 
 
+/* Logo en la sección Hero */
+.hero-logo-img {
+    max-width: 200px; /* Puedes ajustar este número si lo quieres más grande o más pequeño */
+    height: auto;
+    display: block;
+    margin: 0 auto 1rem auto; /* Lo centra horizontalmente y da espacio abajo */
+    object-fit: contain;
+}
+
+
 /* ==========================================
    AJUSTES RESPONSIVOS PARA CELULARES
    ========================================== */
@@ -539,4 +549,9 @@ h1, .logo, .brand-name {
     padding: 20px 15px;
     margin: 15% auto;
   }
+
+  .hero-logo-img {
+    max-width: 85px;
+    margin-bottom: 1rem;
+}
 }
